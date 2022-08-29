@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clipboard</title>
+</head>
+<body>
+<form id="frm">
+    <div>
+        <span th:each="obj, stat : ${data}">
+            <input type="button" class="textObjBtn" th:attr="idx=|${stat.index}|" th:value="|${stat.count}번|">
+        </span>
+    </div>
+    <div style="padding-top: 10px; padding-bottom: 10px">
+        <span th:text="|${page} 페이지|"></span>
+        <input type="button" id="save" value="저장">
+    </div>
+    <div>
+        <textarea style="width: 800px; height: 1000px;" name="textObj" th:text="${textObj}"></textarea>
+        <input type="hidden" name="idx" th:value="${idx}"/>
+    </div>
+</form>
+<script src="static/js/jquery-1.12.4.min.js"></script>
+<script>
+
+    $(".textObjBtn").click(function (){
+       var idx = $(this).attr("idx");
+       location.href = "/?idx=" + idx;
+    });
+
+    $("#save").click(function () {
+        var formSerializeArray = $('#frm').serializeArray();
+        var object = {};
+        for (var i = 0; i < formSerializeArray.length; i++){
+            object[formSerializeArray[i]['name']] = formSerializeArray[i]['value'];
+        }
+
+        var json = JSON.stringify(object);
+
+        $.ajax({
+            type : 'post',
+            url : '/save',
+            data : json,
+            contentType: "application/json",
+            dataType : 'json',
+            error: function(xhr, status, error){
+                console.log(status)
+                alert("저장 실패");
+            },
+            success : function(json){
+                alert("저장 완료");
+                location.reload();
+            }
+        });
+    });
+</script>
+</body>
+</html>
