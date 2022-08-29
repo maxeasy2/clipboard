@@ -3,25 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Clipboard</title>
+    <link rel="stylesheet" type="text/css" href="static/css/button.css">
 </head>
 <body>
 <form id="frm">
     <div>
         <span th:each="obj, stat : ${data}">
-            <input type="button" class="textObjBtn" th:attr="idx=|${stat.index}|" th:value="|${stat.count}번|">
+            <button class="w-btn w-btn-brown textObjBtn" type="button" th:attr="idx=|${stat.index}|" th:text="|${stat.count}번|"/>
         </span>
     </div>
-    <div style="padding-top: 10px; padding-bottom: 10px">
+    <div>
         <span th:text="|${page} 페이지|"></span>
-        <input type="button" id="save" value="저장">
+<!--css 버튼 https://velog.io/@whdnjsdyd111/CSS-%EB%B2%84%ED%8A%BC-%EC%9D%B4%EC%81%98%EA%B2%8C-%EA%BE%B8%EB%AF%B8%EA%B8%B0-->
+        <button class="w-btn w-btn-green" type="button" id="save">저장</button>
+        <button class="w-btn w-btn-blue" type="button" id="copy">복사</button>
     </div>
     <div>
-        <textarea style="width: 800px; height: 1000px;" name="textObj" th:text="${textObj}"></textarea>
+        <textarea style="width: 800px; height: 1000px;" name="textObj" th:text="${textObj}" id="textObj"></textarea>
         <input type="hidden" name="idx" th:value="${idx}"/>
     </div>
 </form>
 <script src="static/js/jquery-1.12.4.min.js"></script>
 <script>
+
+    $("#copy").click(function(){
+        var content = document.getElementById('textObj');
+        content.select();
+        document.execCommand('copy');
+    });
 
     $(".textObjBtn").click(function (){
        var idx = $(this).attr("idx");
