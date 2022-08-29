@@ -2,6 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Clipboard</title>
     <link rel="stylesheet" type="text/css" href="static/css/button.css">
 </head>
@@ -19,7 +20,10 @@
         <button class="w-btn w-btn-blue" type="button" id="copy">복사</button>
     </div>
     <div>
-        <textarea style="width: 800px; height: 1000px;" name="textObj" th:text="${textObj}" id="textObj"></textarea>
+        <span id="statusMsg"></span>
+    </div>
+    <div>
+        <textarea style="width: 500px; height: 800px;" name="textObj" th:text="${textObj}" id="textObj"></textarea>
         <input type="hidden" name="idx" th:value="${idx}"/>
     </div>
 </form>
@@ -30,6 +34,7 @@
         var content = document.getElementById('textObj');
         content.select();
         document.execCommand('copy');
+        visibleStatusMessage("복사 완료");
     });
 
     $(".textObjBtn").click(function (){
@@ -54,14 +59,23 @@
             dataType : 'json',
             error: function(xhr, status, error){
                 console.log(status)
-                alert("저장 실패");
+                //alert("저장 실패");
+              visibleStatusMessage("저장 실패");
             },
             success : function(json){
-                alert("저장 완료");
-                location.reload();
+                //alert("저장 완료");
+                visibleStatusMessage("저장 완료");
+                //location.reload();
             }
         });
     });
+
+    function visibleStatusMessage(text) {
+      setTimeout(function (){
+        $("#statusMsg").text("");
+      }, 2000);
+      $("#statusMsg").text(text);
+    }
 </script>
 </body>
 </html>
