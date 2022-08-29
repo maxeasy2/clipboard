@@ -17,8 +17,12 @@ server:
       charset: UTF-8
       enabled: true
       force: true
-debug: true
+#debug: false
+#logging:
+#  level:
+#    net.mirapps.clipboard: debug
 
 clipboard:
   config:
     object-count: 3
+    expire-seconds: 20
